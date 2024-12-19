@@ -16,7 +16,7 @@ getwd()
 #setwd("~/PhD/Data......")
 
 # Define the list of packages
-packages <- c("readr", "readxl", "tidyverse", "dplyr", "ggplot2")
+packages <- c("writexl","readr", "readxl", "tidyverse", "dplyr", "ggplot2")
 
 # Load packages if not already installed
 lapply(packages, function(pkg) {
@@ -59,6 +59,13 @@ Site_124 <- bind_rows(DO_Logger_3_control_124_291024, DO_Logger_3_control_124_13
 # Summarise the data -----------------------------------------------------------
 Hobo_combined_data <- bind_rows(Site_122, Site_123, Site_124)
 
+# Save as CSV
+write.csv(Hobo_combined_data, "Data_mod/Hobo_combined_data.csv", row.names = FALSE)
+# Save as Excel
+write_xlsx(Hobo_combined_data, "Data_mod/Hobo_combined_data.xlsx")
+
+
+
 ggplot(Hobo_combined_data, aes(x = DateTime , y = DO_mg_L, color = Site)) +
   geom_line() 
 
@@ -100,9 +107,11 @@ ggplot() +
   theme_bw()
 
 ggplot() +
+  geom_line(data = Hobo_combined_data, aes(x = DateTime, y = DO_mg_L, color = Site), alpha = 0.6) +
+  geom_line(data = daily_means, aes(x = Date, y = DO_mean, color = Site), linewidth = 1.2) +
   geom_line(data = Hobo_combined_data, aes(x = DateTime, y = Temp_C, color = Site), alpha = 0.6) +
   geom_line(data = daily_means, aes(x = Date, y = Temp_mean, color = Site), linewidth = 1.2) +
-  labs(title = "Water temperature",x = "Date",y = "Temp_C",color = "Site") +
+  labs(title = "DO Levels & Water temperature",x = "Date",y = "Value",color = "Site") +
   theme_bw()
 
 
